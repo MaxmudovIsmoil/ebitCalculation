@@ -3,34 +3,29 @@
 namespace App\Services;
 
 use App\Http\Resources\CableResource;
-use App\Models\Cable;
+use App\Models\Order;
 use App\Models\CableChange;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 
-class CableService
+class OrderService
 {
-
-    public function getAllCount(): JsonResponse
-    {
-        try {
-            return response()->success(Cable::count());
-        }
-        catch (\Exception $e) {
-            return response()->fail($e->getMessage());
-        }
-    }
+    public function __construct(
+        protected Order $model
+    ) {}
 
     public function list(?int $limit = 20): JsonResponse
     {
         try {
-            $cable = Cable::with(['user' => function ($query) {
+            $orders = $this->model::with(['road',
+                'instance' => function ($query) {
                     $query->select('id', 'name');
                 }])
                 ->orderBy('id', 'DESC')
-                ->paginate($limit);
+                ->get();
+//                ->paginate($limit);
 
-            return response()->success($cable);
+            return response()->success($orders);
         } catch (\Exception $e) {
             return response()->fail($e->getMessage());
         }
@@ -39,8 +34,8 @@ class CableService
     public function one(int $id): JsonResponse
     {
         try {
-            $cable = Cable::findOrfail($id);
-            return response()->success(new CableResource($cable));
+            $order = $this->model::findOrfail($id);
+            return response()->success($order);
         }
         catch (\Exception $e) {
             return response()->fail($e->getMessage());
@@ -52,8 +47,8 @@ class CableService
         try {
             DB::beginTransaction();
                 foreach ($data as $item) {
-                    Cable::create([
-                        'user_id' => (int) $item['user_id'],
+                    $this->model::create([
+                        'user_id' => $item['user_id'],
                         'name' => $item['name'],
                         'remain_stock' => $item['remain_stock'],
                         'purpose' => $item['purpose'],
@@ -76,7 +71,7 @@ class CableService
             DB::beginTransaction();
 
                 if (isset($data['cable_id']) && is_numeric((int)$data['cable_id'])) {
-                    $cable = Cable::findOrFail((int)$data['cable_id']);
+                    $cable = $this->model::findOrFail((int)$data['cable_id']);
                     $changeData = [
                         'cable_id' => (int)$data['cable_id'],
                         'user_id' => (int)$data['user_id']
@@ -128,7 +123,7 @@ class CableService
     public function destroy(int $id): JsonResponse
     {
         try {
-            return response()->success(Cable::destroy($id));
+            return response()->success($this->model::destroy($id));
         }
         catch (\Exception $e) {
             return response()->json($e->getMessage());

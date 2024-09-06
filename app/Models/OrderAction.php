@@ -11,4 +11,11 @@ class OrderAction extends Model
 
     protected $guarded = ['id'];
 
+    protected function casts(): array
+    {
+        return [
+          'created_at' => "datetime:d.m.Y H:i:s",
+          'updated_at' => "datetime:d.m.Y H:i:s"
+        ];
+    }
 }

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('road_order_runs', function (Blueprint $table) {
+        Schema::create('order_road_map_runs', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('orderId');
             $table->json('road');
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('road_order_runs');
+        Schema::dropIfExists('order_road_map_runs');
     }
 };

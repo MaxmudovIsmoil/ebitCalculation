@@ -11,16 +11,15 @@ use Illuminate\Support\Facades\DB;
 class RoadMapService
 {
     public function __construct(
-        public RoadMap $roadMap,
-        public Road $road,
+        public Road $model,
     ) {}
 
     public function getRoadMaps()
     {
-//        $road = $this->road->with(['maps', 'maps.instanceUsers.user'])->get();
-
-        $roads = Road::with(['roadMaps' => function ($query) {
-                $query->select('road_maps.roadId',
+        $roads = $this->model::with(['roadMaps' => function ($query) {
+                $query->select(
+                    'road_maps.roadId',
+                    'road_maps.stage',
                     'instances.id as instance_id',
                     'instances.name',
                     DB::raw("GROUP_CONCAT(u.name SEPARATOR ', ') as userNames"))
@@ -28,15 +27,15 @@ class RoadMapService
                     ->leftJoin('instance_users as iusers', 'iusers.instanceId', '=', 'instances.id')
                     ->leftJoin('users as u', 'u.id', '=', 'iusers.userId')
                     ->groupBy([
-                        'road_maps.roadId', 'instances.id', 'instances.name'
-                    ]);
+                        'road_maps.roadId', 'road_maps.stage', 'instances.id', 'instances.name'
+                    ])
+                    ->orderBy('road_maps.stage');
             }])
             ->select('roads.id as id', 'roads.name as name')
+            ->orderBy('roads.id')
             ->get();
 
         return $roads;
-
-//        return RoadResource::collection($road);
     }
 
     public function getOne(int $roadMapId)
@@ -58,9 +57,6 @@ class RoadMapService
     {
         $user = $this->model->findOrFail($id);
 
-        if (isset($data['roadId']))
-            $user->fill(['roadId' => $data['roadId']]);
-
         if (isset($data['instanceId']))
             $user->fill(['instanceId' => $data['instanceId']]);
 
@@ -78,4 +74,5 @@ class RoadMapService
         $this->model->destroy($id);
         return $id;
     }
+
 }

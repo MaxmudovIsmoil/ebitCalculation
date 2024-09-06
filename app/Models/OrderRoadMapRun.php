@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\AsArrayObject
 
-class RoadOrderRun extends Model
+class OrderRoadMapRun extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     protected $guarded = ['id'];
 
@@ -17,10 +17,10 @@ class RoadOrderRun extends Model
     {
         return [
 //            'road' => 'array'
-            'road' => AsArrayObject
+//            'road' => AsArrayObject
 //            'vaqt' => 'date' date qo'yilsa carbon abyetidan foydalanish mumkin
-//            'created_at' => 'date:d.m.Y'
-//            'created_at' => 'datetime:d.m.Y H:i:s'
+            'created_at' => 'datetime:d.m.Y H:i:s',
+            'updated_at' => 'datetime:d.m.Y H:i:s'
         ];
     }
 

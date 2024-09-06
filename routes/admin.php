@@ -8,13 +8,12 @@ use App\Http\Controllers\Admin\RoadMapController;
 
 Route::middleware(['IsAdmin'])->group(function () {
 
-    // Route::get('/users/{limit?}', [UserController::class, 'getUsers'])->where('limit', '[0-9]+');
+    
     Route::get('/users', [UserController::class, 'index']);
     Route::get('/user/{id}', [UserController::class, 'getOne']);
     Route::post('/user/create', [UserController::class, 'store']);
     Route::put('/user/update/{id}', [UserController::class, 'update']);
     Route::delete('/user/delete/{id}', [UserController::class, 'destroy']);
-
 
     Route::get('/instances', [InstanceController::class, 'index']);
     Route::get('/instance/{id}', [InstanceController::class, 'getOne']);

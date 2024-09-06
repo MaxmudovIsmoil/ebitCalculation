@@ -8,21 +8,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class RoadMap extends Model
 {
-    use HasFactory, SoftDeletes;
-
+    use HasFactory;
     protected $guarded = ['id'];
-
-
-//    public function instance()
-//    {
-//        return $this->hasOne(Instance::class, 'id', 'instanceId');
-//    }
 
     public function instanceUsers()
     {
         return $this->hasOne(InstanceUser::class, 'instanceId', 'instanceId');
     }
-
     public function instance()
     {
         return $this->belongsTo(Instance::class, 'instanceId');

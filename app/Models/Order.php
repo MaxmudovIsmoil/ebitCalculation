@@ -11,4 +11,21 @@ class Order extends Model
 
     protected $guarded = ['id'];
 
+    public function road()
+    {
+        return $this->hasOne(Road::class, 'id', 'roadId');
+    }
+
+    public function instance()
+    {
+        return $this->hasOne(Instance::class, 'id', 'currentInstanceId');
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'created_at' => 'datetime:d.m.Y H:i:s',
+            'updated_at' => 'datetime:d.m.Y H:i:s',
+        ];
+    }
 }
