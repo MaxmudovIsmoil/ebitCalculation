@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('orderId');
             $table->unsignedBigInteger('userId');
-            $table->string('file');
+            $table->unsignedBigInteger('instanceId');
+            $table->string('file')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
             $table->softDeletes();

@@ -30,7 +30,7 @@ class OrderController extends Controller
      */
     public function store(OrderStoreRequest $request)
     {
-        return $this->service->create($request->all());
+        return $this->service->create($request->validated());
     }
 
     /**

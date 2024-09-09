@@ -17,13 +17,19 @@ class OrderService
     public function list(?int $limit = 20): JsonResponse
     {
         try {
-            $orders = $this->model::with(['road',
-                'instance' => function ($query) {
-                    $query->select('id', 'name');
-                }])
-                ->orderBy('id', 'DESC')
-                ->get();
-//                ->paginate($limit);
+            $orders = $this->model::select(
+                    'orders.*',
+                    'roads.name as roadName',
+                    'instances.name as currentInstanceName',
+                    'users.name as userName'
+                )
+                ->leftJoin('roads' ,'roads.id', '=', 'orders.roadId')
+                ->leftJoin('instances' ,'instances.id', '=', 'orders.currentInstanceId')
+                ->leftJoin('users' ,'users.id', '=', 'orders.userId')
+                ->orderBy('orders.id', 'DESC')
+//                ->orderBy('orders.status', 'ASC')
+//                ->get();
+                ->paginate($limit);
 
             return response()->success($orders);
         } catch (\Exception $e) {

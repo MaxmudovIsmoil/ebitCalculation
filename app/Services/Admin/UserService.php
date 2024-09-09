@@ -14,7 +14,8 @@ class UserService
 
     public function getUsers()
     {
-        return $this->model::select('id', 'name', 'email', 'username', 'status', 'ldap', 'canCreateOrder', 'phone', 'created_at')
+        return $this->model::select('id', 'name', 'email', 'username', 'status',
+            'ldap', 'canCreateOrder', 'phone', 'chatId', 'created_at')
             ->where('role', '0')
             ->orderBy('id', 'DESC')
             ->get();

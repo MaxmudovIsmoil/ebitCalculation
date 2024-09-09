@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderActionController;
+use App\Http\Controllers\OrderRoadMapRunController;
+use App\Http\Controllers\OrderFileController;
 
 
 Route::post('login', [AuthController::class, 'login'])->name('login');
@@ -19,7 +21,10 @@ Route::post('login', [AuthController::class, 'login'])->name('login');
 
 //    Route::get('order-detail/{id}', [OrderDetailController::class, 'index'])->where('limit', '[0-9]+');
     Route::get('order-action/{id}', [OrderActionController::class, 'index'])->where('limit', '[0-9]+');
-    Route::get('order-road', [OrderRoadMapRunController::class, 'index'])->where('limit', '[0-9]+');
+    Route::get('order-road-map/{id}', [OrderRoadMapRunController::class, 'index'])->where('limit', '[0-9]+');
+    Route::get('order-file/{id}', [OrderFileController::class, 'index'])->where('limit', '[0-9]+');
+    Route::post('order-file/create', [OrderFileController::class, 'store']);
+    Route::delete('order-file/delete/{id}', [OrderFileController::class, 'destroy']);
 
 //    Route::get('getCableChanges/{id}', [CableChangeController::class, 'getCableChanges']);
 //    Route::post('logout', [AuthController::class, 'logout'])->name('logout');
