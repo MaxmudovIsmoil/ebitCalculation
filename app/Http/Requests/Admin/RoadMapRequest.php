@@ -18,9 +18,10 @@ class RoadMapRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'oradId' => 'required',
+            'roadId' => 'required',
             'instanceId' => 'required',
             'stage' => 'required',
+            'userIds' => 'sometimes',
         ];
     }
 

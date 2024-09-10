@@ -16,13 +16,14 @@ Route::middleware(['IsAdmin'])->group(function () {
     Route::delete('/user/delete/{id}', [UserController::class, 'destroy'])->name('user.destroy');
 
     Route::get('/instances', [InstanceController::class, 'index'])->name('instance.index');
+    Route::get('/get-instances', [InstanceController::class, 'getInstances'])->name('getInstances');
     Route::get('/instance/{id}', [InstanceController::class, 'getOne'])->name('instance.getOne');
-    Route::get('/get-instances', [InstanceController::class, 'getInstances'])->name('getInstnaces');
     Route::post('/instance/create', [InstanceController::class, 'store'])->name('instance.store');
     Route::put('/instance/update/{id}', [InstanceController::class, 'update'])->name('instance.update');
     Route::delete('/instance/delete/{id}', [InstanceController::class, 'destroy'])->name('instance.destroy');
 
     Route::get('/roads', [RoadController::class, 'index'])->name('road.index');
+    Route::get('/get-roads', [RoadController::class, 'getRoads'])->name('getRoads');
     Route::get('/road/{id}', [RoadController::class, 'getOne'])->name('road.getOne');
     Route::post('/road/create', [RoadController::class, 'store'])->name('road.store');
     Route::put('/road/update/{id}', [RoadController::class, 'update'])->name('road.update');
@@ -30,7 +31,7 @@ Route::middleware(['IsAdmin'])->group(function () {
 
     Route::get('/road-maps', [RoadMapController::class, 'index'])->name('road-map.index');
     Route::get('/road-map/{id}', [RoadMapController::class, 'getOne'])->name('road-map.getOne');
-    Route::post('/road-map/create', [RoadMapController::class, 'store'])->name('road-map.create');
+    Route::post('/road-map/create', [RoadMapController::class, 'store'])->name('road-map.store');
     Route::put('/road-map/update/{id}', [RoadMapController::class, 'update'])->name('road-map.update');
     Route::delete('/road-map/delete/{id}', [RoadMapController::class, 'destroy'])->name('road-map.destroy');
 

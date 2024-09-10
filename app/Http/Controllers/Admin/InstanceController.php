@@ -13,7 +13,7 @@ use Illuminate\Http\JsonResponse;
 class InstanceController extends Controller
 {
     public function __construct(
-        public InstanceService $service
+        protected InstanceService $service
     ) {}
 
     public function index()
@@ -21,7 +21,7 @@ class InstanceController extends Controller
         return view('admin.instance.index');
     }
 
-    public function getInstnaces()
+    public function getInstances()
     {
         return $this->service->getInstances();
     }

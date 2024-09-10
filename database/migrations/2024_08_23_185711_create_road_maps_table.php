@@ -16,10 +16,9 @@ return new class extends Migration
             $table->unsignedBigInteger('roadId');
             $table->integer('stage');
             $table->unsignedBigInteger('instanceId');
-            $table->unique(['stage', 'roadId']);
+//            $table->unique(['stage', 'roadId']);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
-            $table->softDeletes();
             $table->foreign('roadId')->references('id')->on('roads')->onDelete('cascade');
             $table->foreign('instanceId')->references('id')->on('instances')->onDelete('restrict');
         });

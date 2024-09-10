@@ -15,13 +15,13 @@ class RoadMapController extends Controller
         public RoadMapService $service
     ) {}
 
-    public function index(): JsonResponse
+    public function index()
     {
-        try {
-            return response()->success(data: $this->service->getRoadMaps());
-        } catch (\Exception $e) {
-            return response()->fail(error: $e->getMessage());
-        }
+        $instances = $this->service->instances();
+        $users = $this->service->users();
+
+        $roads = $this->service->getRoadMaps();
+        return view('admin.roadMap.index', compact('roads', 'instances', 'users'));
     }
 
     public function getOne(int $roadMapId): JsonResponse

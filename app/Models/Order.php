@@ -12,28 +12,6 @@ class Order extends Model
 
     protected $guarded = ['id'];
 
-    public function road()
-    {
-        return $this->hasOne(Road::class, 'id', 'roadId');
-    }
-
-
-    public function instance()
-    {
-        return $this->hasOne(Instance::class, 'id', 'currentInstanceId');
-    }
-
-
-    public function user()
-    {
-        return $this->hasOne(User::class, 'id', 'userId');
-    }
-
-
-    public function currentInstance()
-    {
-        return $this->hasOne(Instance::class, 'id', 'currentInstanceId');
-    }
 
     public function orderAction()
     {

@@ -13,7 +13,7 @@ class RoadMap extends Model
 
     public function instanceUsers()
     {
-        return $this->hasOne(InstanceUser::class, 'instanceId', 'instanceId');
+        return $this->hasMany(InstanceUser::class, 'instanceId', 'instanceId');
     }
     public function instance()
     {

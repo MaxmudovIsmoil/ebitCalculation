@@ -13,22 +13,23 @@ use Illuminate\Http\JsonResponse;
 class RoadController extends Controller
 {
     public function __construct(
-        public RoadService $service
+        protected RoadService $service
     ) {}
 
     public function index()
     {
-        try {
-            return response()->success(data: $this->service->getRoads());
-        } catch (\Exception $e) {
-            return response()->fail(error: $e->getMessage());
-        }
+        return view('admin.road.index');
     }
 
-    public function getOne(int $roadId)
+    public function getRoads()
+    {
+        return $this->service->getRoads();
+    }
+
+    public function getOne(int $id)
     {
         try {
-            return response()->success(data: $this->service->getOne($roadId));
+            return response()->success(data: $this->service->getOne($id));
         } catch (\Exception $e) {
             return response()->fail(error: $e->getMessage());
         }

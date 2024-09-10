@@ -3,7 +3,7 @@
 @section('content')
     <div class="container-fluid">
         <div class="bg-shadow">
-            <button data-url="{{ route('admin.instance.store') }}" class="btn btn-primary float-left js_add_btn">
+            <button data-url="{{ route('admin.road.store') }}" class="btn btn-primary float-left js_add_btn">
                 <i class="fas fa-plus"></i> &nbsp; Add
             </button>
             <table class="table table-sm table-bordered table-striped table-hover" id="datatable">
@@ -11,7 +11,6 @@
                     <tr>
                         <th class="text-center" width="3%">№</th>
                         <th>Name</th>
-                        <th>Time Line</th>
 {{--                        <th>Status</th>--}}
                         <th class="text-end">Action</th>
                     </tr>
@@ -23,7 +22,7 @@
     </div>
 
 
-    @include('admin.instance.addEditModal')
+    @include('admin.road.addEditModal')
 
     @include('layouts.deleteModal')
 
@@ -57,13 +56,12 @@
             processing: true,
             serverSide: true,
             ajax: {
-                url: '{{ route("admin.getInstances") }}',
+                url: '{{ route("admin.getRoads") }}',
                 type: 'GET'
             },
             columns: [
                 {data: 'DT_RowIndex'},
                 {data: 'name'},
-                {data: 'timeLine'},
                 // {data: 'status'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
@@ -75,7 +73,7 @@
 
             form.attr('action', url);
             user_form_clear(form);
-            modal.find('.modal-title').html('Add Instance');
+            modal.find('.modal-title').html('Add Road');
             modal.modal('show');
         })
 
@@ -85,7 +83,7 @@
             let one_url = $(this).data('one_url');
             let update_url = $(this).data('update_url');
             let form = modal.find('.js_add_edit_form');
-            modal.find('.modal-title').html('Edit Instance');
+            modal.find('.modal-title').html('Edit Road');
             user_form_clear(form);
 
             form.attr('action', update_url);
@@ -98,7 +96,7 @@
                 success: (response) => {
                     console.log(response)
                     const data = response.data;
-                    const formFields = ['.js_name', '.js_timeLine'];
+                    const formFields = ['.js_name'];
                     formFields.forEach(field => form.find(field).val(data[field.slice(4)]));
                     modal.modal('show');
                 },

@@ -20,12 +20,12 @@ class InstanceService
         return DataTables::of($instances)
             ->addIndexColumn()
             ->editColumn('id', '{{$id}}')
-            ->editColumn('status', function($user) {
-                return ($user['status'] == 1)
+            ->editColumn('status', function($instance) {
+                return ($instance['status'] == 1)
                     ? '<div class="text-center"><i class="fa-solid fa-check text-success"></i></div>'
                     : '<div class="text-center"><i class="fa-solid fa-xmark text-danger"></i></div>';
             })
-            ->addColumn('action', function ($user) {
+            ->addColumn('action', function ($instance) {
                 return '<div class="d-flex justify-content-around">
                             <a class="js_edit_btn mr-3 btn btn-outline-primary btn-sm"
                                 data-update_url="'.route('admin.instance.update', $instance['id']).'"
@@ -58,7 +58,7 @@ class InstanceService
         $this->model->create([
             'name' => $data['name'],
             'timeLine' => $data['timeLine'] ?? 8,
-            'status' => $status,
+//            'status' => $status,
         ]);
 
         return $data;
@@ -72,10 +72,10 @@ class InstanceService
             $user->fill(['name' => $data['name']]);
 
         if (isset($data['timeLine']))
-            $user->fill(['timeLine' => Hash::make($data['timeLine'])]);
+            $user->fill(['timeLine' => $data['timeLine']]);
 
-        if (isset($data['status']))
-            $user->fill(['status' => $data['status']]);
+//        if (isset($data['status']))
+//            $user->fill(['status' => $data['status']]);
 
         $user->save();
 

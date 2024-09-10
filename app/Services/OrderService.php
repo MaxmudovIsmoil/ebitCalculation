@@ -26,41 +26,24 @@ class OrderService
     public function list(?int $limit = 20)
     {
         try {
-            $userInstanceIds = $this->userInstanceIds();
+//            $userInstanceIds = $this->userInstanceIds();
 
-            $orderQuery = Order::select('o.id as orderId', 'o.userId', 'o.instanceId',
-                'o.allStage', 'o.status', 'o.currentStage', 'o.currentInstanceId',
-                'ormr.*',
+            $orders = Order::select('o.id as orderId', 'o.userId', 'o.instanceId',
+                    'o.allStage', 'o.status', 'o.currentStage', 'o.currentInstanceId', 'o.created_at',
+                    'users.name as userName', 'roads.name as roadName',
+                    'instances.name as instanceName', 'ins.name as currentInstanceName',
                 )
                 ->from('orders as o')
-                ->leftJoin('order_road_map_run2s as ormr', 'ormr.orderId', '=', 'o.id')
-                ->leftJoin('order_actions as oa', function ($join) {
-                    $join->on('oa.orderId', '=', 'o.id');
-                })
-                ->with(['user', 'instance', 'currentInstance'])
-                ->where(function ($query) use ($userInstanceIds) {
-                    $query->where(function ($query) use ($userInstanceIds) {
-                        $query->where(function ($query) use ($userInstanceIds) {
-                            $query->whereIn('ormr.instanceId', $userInstanceIds)
-                                ->where('ormr.stage', '<=', DB::raw('o.currentStage'));
-//                        })->orWhere(function ($query) use ($userInstanceIds) {
-//                            $query->whereIn('ormr.instanceId', $userInstanceIds)
-//                                ->whereIn('oa.instanceId', $userInstanceIds);
-                        });
-                    });
-//                        ->whereIn('ormr.userInstanceId', $userInstanceIds, 'or')
-                });
-
-
-//            if(!is_null($status)){
-//                $orderQuery = $orderQuery->where(['o.status' => $status]);
-//            }
-
-            $orders = $orderQuery //->groupBy('o.id')
+                ->leftJoin('users', 'users.id', '=', 'o.userId')
+                ->leftJoin('roads', 'roads.id', '=', 'o.roadId')
+                ->leftJoin('instances', 'instances.id', '=', 'o.instanceId')
+                ->leftJoin('instances as ins', 'ins.id', '=', 'o.currentInstanceId')
+//                ->leftJoin('order_road_map_runs as ormr', 'ormr.orderId', '=', 'o.id')
+//                ->leftJoin('order_actions as oa', function ($join) {
+//                    $join->on('oa.orderId', '=', 'o.id');
+//                })
                 ->orderBy('o.id', 'DESC')
-                ->orderBy('o.currentStage', 'ASC')
                 ->get();
-//                ->paginate(20);
 
             return $orders;
         } catch (\Exception $e) {

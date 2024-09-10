@@ -32,14 +32,14 @@ Route::middleware(['auth', 'IsActive'])->group(function () {
     Route::get('/order/comments/{id}', [OrderController::class, 'getOrderActionComments'])->name('order.getOrderActionComments');
 
     // order detail
-    Route::get('/order/get-detail/{orderId}', [OrderDetailController::class, 'getOne'])->name('order_detail.getOne');
-    Route::post('/order-detail/store/', [OrderDetailController::class, 'store'])->name('order_detail.store');
+    Route::get('/order/detail/{orderId}', [OrderDetailController::class, 'getOne'])->name('orderDetail');
+    Route::post('/order-detail/store/', [OrderDetailController::class, 'store'])->name('orderDetail.store');
     Route::post('/order-detail/update/{id}', [OrderDetailController::class, 'update']);
     Route::delete('/order-detail/delete/{id}', [OrderDetailController::class, 'destroy']);
 
     // order file
-    Route::get('/order/get-file/{id}', [OrderFileController::class, 'getFiles'])->name('order_files');
-    Route::post('/order-file/store/', [OrderFileController::class, 'store'])->name('order_file.store');
+    Route::get('/order/get-file/{id}', [OrderFileController::class, 'getFiles'])->name('orderFiles');
+    Route::post('/order-file/store/', [OrderFileController::class, 'store'])->name('orderFile.store');
     Route::delete('/order-file/delete/{id}', [OrderFileController::class, 'destroy']);
 
     // order action

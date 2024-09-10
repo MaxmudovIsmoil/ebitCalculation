@@ -13,8 +13,39 @@
                 <li class="nav-item">
                     <a class="nav-link fw-semibold" href="https://portal.etc-network.uz">@lang('admin.Portal')</a>
                 </li>
+
+                @if (Auth::user()->role == 1)
+                    <li class="nav-item dropdown">
+                        <a class="nav-link fw-semibold dropdown-toggle" href="#" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-regular fa-gear"></i> Administrator
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="nav-item">
+                                <a class="dropdown-item fw-semibold {{ Request::segment(2) === 'users' ? 'menu-active' : '' }}" href="{{ route('admin.user.index') }}">
+                                    Users
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item fw-semibold {{ Request::segment(2) === 'roads' ? 'menu-active' : '' }}" href="{{ route('admin.road.index') }}">
+                                    Roads
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item fw-semibold {{ Request::segment(2) === 'instances' ? 'menu-active' : '' }}" href="{{ route('admin.instance.index') }}">
+                                    Instances
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item fw-semibold {{ Request::segment(2) === 'road-map' ? 'menu-active' : '' }}" href="{{ route('admin.road-map.index') }}">
+                                   Road map
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                @endif
                 <li class="nav-item">
-                    <a class="nav-link fw-semibold" href="{{ route('order.index') }}">Order</a>
+                    <a class="nav-link fw-semibold hover" href="{{ route('order.index') }}">Order</a>
                 </li>
             </ul>
 {{--            {!! \App\Facades\MenuServiceFacade::showMenu() !!}--}}

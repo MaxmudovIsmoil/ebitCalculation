@@ -20,7 +20,7 @@ class InstanceUpdateRequest extends FormRequest
         return [
             'name' => 'required|string|unique:instances,name,'.$this->id,
             'timeLine' => 'sometimes',
-            'status' => 'sometimes',
+//            'status' => 'sometimes',
         ];
     }
 

@@ -4,7 +4,7 @@
     <div class="container-fluid">
         <div class="bg-shadow position-relative">
             <button data-url="{{ route('admin.user.store') }}" class="btn btn-primary btn-sm add-btn float-left js_add_btn">
-                <i class="fa-solid fa-user-plus"></i> &nbsp; Add user
+                <i class="fa-solid fa-user-plus"></i> &nbsp; Add
             </button>
 
             <table class="table table-bordered table-striped table-sm w-100 table-hover" id="userDatatable">

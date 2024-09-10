@@ -15,4 +15,5 @@ class InstanceUser extends Model
         return $this->hasOne(User::class, 'id', 'userId');
     }
 
+    public $timestamps = false;
 }

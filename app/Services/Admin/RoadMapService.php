@@ -4,6 +4,9 @@ namespace App\Services\Admin;
 
 use App\Models\RoadMap;
 use App\Models\Road;
+use App\Models\User;
+use App\Models\Instance;
+use App\Models\InstanceUser;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\RoadResource;
 use Illuminate\Support\Facades\DB;
@@ -11,13 +14,25 @@ use Illuminate\Support\Facades\DB;
 class RoadMapService
 {
     public function __construct(
-        public Road $model,
+        protected RoadMap $model,
     ) {}
+
+    public function instances(): array
+    {
+        return Instance::where('status', 1)->get()->toArray();
+    }
+
+    public function users()
+    {
+        return User::where(['role' => '0', 'status' => 1])->orderBy('id', 'DESC')->get()->toArray();
+    }
+
 
     public function getRoadMaps()
     {
-        $roads = $this->model::with(['roadMaps' => function ($query) {
+        $roads = Road::with(['roadMaps' => function ($query) {
                 $query->select(
+                    'road_maps.id',
                     'road_maps.roadId',
                     'road_maps.stage',
                     'instances.id as instance_id',
@@ -27,7 +42,7 @@ class RoadMapService
                     ->leftJoin('instance_users as iusers', 'iusers.instanceId', '=', 'instances.id')
                     ->leftJoin('users as u', 'u.id', '=', 'iusers.userId')
                     ->groupBy([
-                        'road_maps.roadId', 'road_maps.stage', 'instances.id', 'instances.name'
+                       'road_maps.id', 'road_maps.roadId', 'road_maps.stage', 'instances.id', 'instances.name'
                     ])
                     ->orderBy('road_maps.stage');
             }])
@@ -40,32 +55,69 @@ class RoadMapService
 
     public function getOne(int $roadMapId)
     {
-        return $this->model->findOrFail($roadMapId);
+        $roadMap = $this->model->with(['instanceUsers' => function ($query) {
+            $query->select('instanceId', 'userId');
+        }])->findOrFail($roadMapId);
+
+        $userIds = $roadMap->instanceUsers->pluck('userId')->toArray();
+        $roadMap->userIds = $userIds;
+
+        return $roadMap;
     }
 
-    public function store(array $data): array
+    public function store(array $data): string
     {
-        $this->model->create([
-            'roadId' => $data['roadId'],
-            'instanceId' => $data['instanceId'],
-            'stage' => $data['stage']
-        ]);
-        return $data;
+        try {
+            DB::beginTransaction();
+                $this->model->create([
+                    'roadId' => $data['roadId'],
+                    'instanceId' => $data['instanceId'],
+                    'stage' => $data['stage']
+                ]);
+
+                if(!empty($data['userIds'])) {
+                    InstanceUser::where('instanceId', $data['instanceId'])->delete();
+                    foreach ($data['userIds'] as $userId) {
+                        InstanceUser::create([
+                            'instanceId' => $data['instanceId'],
+                            'userId' => $userId
+                        ]);
+                    }
+                }
+            DB::commit();
+            return 'ok';
+        }
+        catch(\Exception $e) {
+            DB::rollBack();
+            return $e->getMessage();
+        }
     }
 
-    public function update(int $id, array $data): array
+    public function update(int $id, array $data): string
     {
-        $user = $this->model->findOrFail($id);
-
-        if (isset($data['instanceId']))
-            $user->fill(['instanceId' => $data['instanceId']]);
-
-        if (isset($data['stage']))
-            $user->fill(['stage' => $data['stage']]);
-
-        $user->save();
-
-        return $user->toArray();
+        try {
+            DB::beginTransaction();
+                $this->model->findOrfail($id)
+                    ->update([
+                        'instanceId' => $data['instanceId'],
+                        'stage' => $data['stage']
+                    ]);
+                if(!empty($data['userIds'])) {
+                    InstanceUser::where('instanceId', $data['instanceId'])->delete();
+                    foreach ($data['userIds'] as $userId) {
+                        InstanceUser::create([
+                            'instanceId' => $data['instanceId'],
+                            'userId' => $userId
+                        ]);
+                    }
+                }
+            DB::commit();
+            return 'ok';
+        }
+        catch(\Exception $e) {
+            DB::rollBack();
+            return $e->getMessage();
+        }
     }
 
 
