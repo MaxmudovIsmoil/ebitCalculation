@@ -18,11 +18,12 @@ class InstanceController extends Controller
 
     public function index()
     {
-        try {
-            return response()->success(data: $this->service->getInstances());
-        } catch (\Exception $e) {
-            return response()->fail(error: $e->getMessage());
-        }
+        return view('admin.instance.index');
+    }
+
+    public function getInstnaces()
+    {
+        return $this->service->getInstances();
     }
 
     public function getOne(int $instanceId)

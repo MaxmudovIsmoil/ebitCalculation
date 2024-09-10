@@ -15,11 +15,11 @@ class Ldap
 
     public function __construct()
     {
-        $this->ldap_host =  config('app.ldap_host');
-        $this->ldap_port = config('app.ldap_port');
-        $this->ldap_base_dn = config('app.ldap_base_dn');
-        $this->ldap_user = config('app.ldap_user');
-        $this->ldap_password = config('app.ldap_password');
+        $this->ldap_host =  config('ldap.host');
+        $this->ldap_port = config('ldap.port');
+        $this->ldap_base_dn = config('ldap.base_dn');
+        $this->ldap_user = config('ldap.user');
+        $this->ldap_password = config('ldap.password');
 
         $this->connection = ldap_connect($this->ldap_host, $this->ldap_port);
         ldap_set_option($this->connection, LDAP_OPT_PROTOCOL_VERSION, 3);

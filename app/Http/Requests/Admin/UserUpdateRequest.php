@@ -18,13 +18,17 @@ class UserUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
+            'roadId' => 'sometimes',
+            'instanceId' => 'required',
+            'position' => 'required',
+            'name' => 'required',
             'email' => 'required|string|unique:users,email,'.$this->id,
             'phone' => 'required|max:9|min:9|unique:users,phone,'.$this->id,
-            'password' => 'required|min:3',
+            'username' => 'required|unique:users,username,'.$this->id,
             'status' => 'required',
-            'ldap' => 'required',
+            'language' => 'required',
             'canCreateOrder' => 'required',
+            'showBuilder' => 'required',
         ];
     }
 

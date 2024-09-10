@@ -18,13 +18,16 @@ class UserStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'roadId' => 'sometimes',
+            'instanceId' => 'required',
+            'position' => 'required',
             'name' => 'required|string|max:255',
-            'email' => 'required|string|unique:users,email,'.$this->id,
-            'phone' => 'required|max:9|min:9|unique:users,phone,'.$this->id,
-            'password' => 'required|min:3',
+            'email' => 'required|string|unique:users,email',
+            'phone' => 'required|max:9|min:9|unique:users,phone',
+            'username' => 'required|string|unique:users,username',
             'status' => 'required',
-            'ldap' => 'required',
             'canCreateOrder' => 'required',
+            'showBuilder' => 'required',
         ];
     }
 

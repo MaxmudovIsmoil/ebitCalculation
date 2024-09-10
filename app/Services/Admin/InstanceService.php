@@ -4,16 +4,48 @@ namespace App\Services\Admin;
 
 use App\Models\Instance;
 use Illuminate\Support\Facades\Hash;
+use Yajra\DataTables\DataTables;
 
 class InstanceService
 {
     public function __construct(
-        public Instance $model,
+        protected Instance $model,
     ) {}
+
 
     public function getInstances()
     {
-        return $this->model->orderBy('id', 'DESC')->get();
+        $instances = $this->model->orderBy('id', 'DESC')->get()->toArray();
+
+        return DataTables::of($instances)
+            ->addIndexColumn()
+            ->editColumn('id', '{{$id}}')
+            ->editColumn('status', function($user) {
+                return ($user['status'] == 1)
+                    ? '<div class="text-center"><i class="fa-solid fa-check text-success"></i></div>'
+                    : '<div class="text-center"><i class="fa-solid fa-xmark text-danger"></i></div>';
+            })
+            ->addColumn('action', function ($user) {
+                return '<div class="d-flex justify-content-around">
+                            <a class="js_edit_btn mr-3 btn btn-outline-primary btn-sm"
+                                data-update_url="'.route('admin.instance.update', $instance['id']).'"
+                                data-one_url="'.route('admin.instance.getOne', $instance['id']).'"
+                                href="javascript:void(0);" title="Edit">
+                                <i class="fas fa-pen mr-50"></i>
+                            </a>
+                            <a class="js_delete_btn btn btn-outline-danger btn-sm"
+                                data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                data-name="'.$instance['name'].'"
+                                data-url="'.route('admin.instance.destroy', $instance['id']).'"
+                                href="javascript:void(0);" title="Delete">
+                                <i class="far fa-trash-alt mr-50"></i>
+                            </a>
+                         </div>';
+            })
+            ->setRowClass('js_this_tr')
+            ->rawColumns(['status', 'action'])
+            ->setRowAttr(['data-id' => '{{ $id }}'])
+            ->make();
     }
 
     public function getOne(int $instanceId)

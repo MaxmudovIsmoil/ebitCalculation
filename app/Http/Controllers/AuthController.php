@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use App\Exceptions\NotFoundException;
 use App\Exceptions\UnauthorizedException;
 use App\Http\Requests\LoginRequest;
-use App\Http\Requests\ProfileUpdateRequest;
-use App\Http\Requests\RegisterRequest;
+use App\Ldap\Ldap;
+use App\Models\User;
 use App\Services\AuthService;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redirect;
 
 class AuthController extends Controller
 {
@@ -17,46 +20,106 @@ class AuthController extends Controller
     ) {}
 
 
-    public function login(LoginRequest $request): JsonResponse
+    /**
+     * @param LoginRequest $request
+     * @throws UnauthorizedException
+     * @throws NotFoundException
+     */
+    public function login(LoginRequest $request)
     {
         try {
-            $result = $this->service->login($request->validated());
+            $this->service->login($request->validated());
 
-            return response()->success(data:$result, code: 200);
-        }
-        catch (NotFoundException $e) {
-            return response()->fail(error: $e->getMessage(), code: $e->getCode());
+            return redirect()->route('admin.user.index');
         }
         catch (UnauthorizedException $e) {
-            return response()->fail(error: $e->getMessage(), code: $e->getCode());
+            // MailController::sendErrorAdmin($e->getMessage());
+            return Redirect::back()->withErrors(['message' => $e->getMessage(), 'code' => $e->getCode()]);
+        }
+        catch (NotFoundException $e) {
+            // MailController::sendErrorAdmin($e->getMessage());
+            return Redirect::back()->withErrors(['message' => $e->getMessage(), 'code' => $e->getCode()]);
         }
     }
 
-
-    public function logout(): JsonResponse
+    public function logout()
     {
         $this->service->logout();
-        return response()->success(data: ['message' => 'Logged out successfully']);
+
+        return redirect()->route('login');
     }
 
 
-    public function profile()
+//    public function profile(UserProfileRequest $request): JsonResponse
+//    {
+//        try {
+//            $result = $this->service->profile($request->validated());
+//            return response()->success($result);
+//        }
+//        catch(\Exception $e) {
+//            return response()->fail($e->getMessage());
+//        }
+//    }
+
+
+    public function loginConfluence(Request $request, Ldap $ldap)
     {
-        try {
-            return response()->success($this->service->profile());
+
+        $request->validate(['login' => 'required']);
+        $login = strtolower($request->login);
+
+        $check_data = $this->checkDataConfluence($login);
+
+
+        if(!$check_data['status'])
+            return redirect()->back()->withErrors('No permission to use the system');
+
+        $login = $check_data['login'];
+
+        $user = User::where('login', $login)
+            ->where('status', 1)
+            ->where('is_deleted', 0)
+            ->where('ldap', 1)
+            ->first();
+
+        if ($user) {
+            $handle = $ldap->handle_confluence($login);
+            if ($handle['status'] === true && Auth::attempt(['login' => $login]))
+                return redirect()->intended('home');
         }
-        catch (\Exception $e) {
-            return response()->fail($e->getMessage());
-        }
+
+
+
+        return redirect()->back()->withErrors($handle['message']);
+
     }
 
-    public function profileUpdate(ProfileUpdateRequest $request)
+
+
+    public function checkDataConfluence(string $login): array
     {
-        try {
-            return response()->success($this->service->profileUpdate($request->validated()));
-        }
-        catch (\Exception $e) {
-            return response()->fail($e->getMessage());
-        }
+        $login_project = base64_decode($login);
+        $login_project_array = explode(':', $login_project);
+
+
+        $login = $login_project_array[0] ?? null;
+        $project_name = $login_project_array[1] ?? null;
+        $time = isset($login_project_array[2]) ? (int)$login_project_array[2] : null;
+        $login = base64_decode($login);
+
+
+        if($project_name != 'weekly')
+            return ['status' => false];
+
+        $start_date = strtotime("-3 minutes");
+        $end_date   = strtotime("+1 hour");
+
+
+        if(!(($start_date <= $time) && ($time < $end_date)))
+            return ['status' => false];
+
+
+        return ['status' => true, 'login' => $login];
     }
+
 }

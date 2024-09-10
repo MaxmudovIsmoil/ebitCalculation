@@ -17,11 +17,13 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('username')->unique();
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->enum('status', [1, 0])->default(1);
             $table->enum('role', [1, 0])->default(0);
             $table->enum('ldap', [1, 0])->default(1);
+            $table->enum('language', ['en', 'ru'])->default('en');
             $table->enum('canCreateOrder', [1, 0])->default(1);
+            $table->enum('showBuilder', [1, 0])->default(1);
             $table->string('phone')->nullable();
             $table->bigInteger('chatId')->nullable();
             $table->timestamp('email_verified_at')->nullable();

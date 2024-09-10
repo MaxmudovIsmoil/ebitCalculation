@@ -13,12 +13,17 @@ return new class extends Migration
     {
         Schema::create('order_road_map_runs', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('orderId');
-            $table->json('road');
+            $table->unsignedBigInteger('orderId')->index();
+            $table->unsignedBigInteger('roadId');
+            $table->integer('stage');
+            $table->unique(['orderId', 'stage']);
+            $table->json('users')->nullable();
+            $table->unsignedBigInteger('instanceId');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
-            $table->softDeletes();
             $table->foreign('orderId')->references('id')->on('orders')->onDelete('cascade');
+            $table->foreign('roadId')->references('id')->on('roads')->onDelete('restrict');
+            $table->foreign('instanceId')->references('id')->on('instances')->onDelete('restrict');
         });
     }
 

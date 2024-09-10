@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Enums\OrderStatus;
 
 return new class extends Migration
 {
@@ -26,6 +27,7 @@ return new class extends Migration
             $table->integer('allStage');
             $table->unsignedBigInteger('currentInstanceId');
             $table->integer('currentStage');
+            $table->enum('status', OrderStatus::toArray())->default(1)->comment('1-processing,2-accepted,3-go back,4-declined,5-completed');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
             $table->foreign('userId')->references('id')->on('users')->onDelete('restrict');

@@ -5,7 +5,10 @@ namespace App\Services;
 use App\Http\Resources\CableResource;
 use App\Models\Order;
 use App\Models\CableChange;
+use App\Models\InstanceUser;
+use App\Models\OrderRoadMapRun;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class OrderService
@@ -14,26 +17,54 @@ class OrderService
         protected Order $model
     ) {}
 
-    public function list(?int $limit = 20): JsonResponse
+    public function userInstanceIds()
+    {
+        return InstanceUser::where('userId', Auth::id())->pluck('instanceId')->toArray();
+    }
+
+
+    public function list(?int $limit = 20)
     {
         try {
-            $orders = $this->model::select(
-                    'orders.*',
-                    'roads.name as roadName',
-                    'instances.name as currentInstanceName',
-                    'users.name as userName'
-                )
-                ->leftJoin('roads' ,'roads.id', '=', 'orders.roadId')
-                ->leftJoin('instances' ,'instances.id', '=', 'orders.currentInstanceId')
-                ->leftJoin('users' ,'users.id', '=', 'orders.userId')
-                ->orderBy('orders.id', 'DESC')
-//                ->orderBy('orders.status', 'ASC')
-//                ->get();
-                ->paginate($limit);
+            $userInstanceIds = $this->userInstanceIds();
 
-            return response()->success($orders);
+            $orderQuery = Order::select('o.id as orderId', 'o.userId', 'o.instanceId',
+                'o.allStage', 'o.status', 'o.currentStage', 'o.currentInstanceId',
+                'ormr.*',
+                )
+                ->from('orders as o')
+                ->leftJoin('order_road_map_run2s as ormr', 'ormr.orderId', '=', 'o.id')
+                ->leftJoin('order_actions as oa', function ($join) {
+                    $join->on('oa.orderId', '=', 'o.id');
+                })
+                ->with(['user', 'instance', 'currentInstance'])
+                ->where(function ($query) use ($userInstanceIds) {
+                    $query->where(function ($query) use ($userInstanceIds) {
+                        $query->where(function ($query) use ($userInstanceIds) {
+                            $query->whereIn('ormr.instanceId', $userInstanceIds)
+                                ->where('ormr.stage', '<=', DB::raw('o.currentStage'));
+//                        })->orWhere(function ($query) use ($userInstanceIds) {
+//                            $query->whereIn('ormr.instanceId', $userInstanceIds)
+//                                ->whereIn('oa.instanceId', $userInstanceIds);
+                        });
+                    });
+//                        ->whereIn('ormr.userInstanceId', $userInstanceIds, 'or')
+                });
+
+
+//            if(!is_null($status)){
+//                $orderQuery = $orderQuery->where(['o.status' => $status]);
+//            }
+
+            $orders = $orderQuery //->groupBy('o.id')
+                ->orderBy('o.id', 'DESC')
+                ->orderBy('o.currentStage', 'ASC')
+                ->get();
+//                ->paginate(20);
+
+            return $orders;
         } catch (\Exception $e) {
-            return response()->fail($e->getMessage());
+            return $e->getMessage();
         }
     }
 

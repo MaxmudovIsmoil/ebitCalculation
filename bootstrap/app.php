@@ -13,16 +13,17 @@ return Application::configure(basePath: dirname(__DIR__))
         then: function () {
             Route::name('admin.')
                 ->prefix('admin')
-//                ->middleware(['auth:sanctum', 'isAdmin'])
+                ->middleware(['web', 'IsAdmin'])
                 ->group(base_path('routes/admin.php'));
 
-            Route::prefix('api')
-                ->group(base_path('routes/api.php'));
+//            Route::prefix('api')
+//                ->group(base_path('routes/api.php'));
         },
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
-            'IsAdmin' => \App\Http\Middleware\IsAdminMiddleware::class,
+            'IsActive' => \App\Http\Middleware\IsActive::class,
+            'IsAdmin' => \App\Http\Middleware\IsAdmin::class,
         ]);
 //        $middleware->redirectGuestsTo('/admin/login');
     })

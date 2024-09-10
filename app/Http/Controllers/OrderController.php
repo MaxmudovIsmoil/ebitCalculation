@@ -16,7 +16,9 @@ class OrderController extends Controller
 
     public function index(?int $limit = null)
     {
-        return $this->service->list($limit);
+        $orders = $this->service->list($limit);
+
+        return view('order.index', compact('orders'));
     }
 
     public function getOne(int $id)

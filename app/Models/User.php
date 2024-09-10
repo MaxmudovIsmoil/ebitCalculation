@@ -8,7 +8,27 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Carbon;
 
+/**
+ * App\Models\User
+ *
+ * @method where(string $string, string $username)
+ * @method wherelogin(string $login)
+ * @property int $id
+ * @property string $name
+ * @property mixed $password
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|User query()
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User where(string $string, string $name)
+ * @method static \Illuminate\Database\Eloquent\Builder|User update(array $data)
+ * @mixin \Eloquent
+ */
 class User extends Authenticatable
 {
     use HasFactory, Notifiable, SoftDeletes;
@@ -19,13 +39,19 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'position',
         'name',
         'email',
+        'username',
         'password',
         'status',
         'role',
         'phone',
         'chatId',
+        'ldap',
+        'language',
+        'canCreateOrder',
+        'showBuilder',
     ];
 
     /**
