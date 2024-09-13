@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::create('order_actions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('orderId');
-            $table->unsignedBigInteger('roadId');
-            $table->unsignedBigInteger('userId');
-            $table->unsignedBigInteger('instanceId');
-            $table->string('stage');
-            $table->string('status');
+            $table->unsignedBigInteger('roadId')->nullable();
+            $table->unsignedBigInteger('userId')->nullable();
+            $table->unsignedBigInteger('instanceId')->nullable();
+            $table->string('stage')->nullable();
+            $table->string('status')->nullable();
             $table->string('comment')->default('');
-            $table->string('timeSigned')->default('');
+            $table->string('timeSigned')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
             $table->softDeletes();

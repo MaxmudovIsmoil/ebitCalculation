@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\OrderStoreRequest;
 use App\Http\Requests\OrderUpdateRequest;
+use App\Models\RoadMap;
 use App\Services\OrderService;
 use Illuminate\Http\JsonResponse;
 
@@ -11,14 +12,25 @@ use Illuminate\Http\JsonResponse;
 class OrderController extends Controller
 {
     public function __construct(
-        public OrderService $service
+        protected OrderService $service
     ) {}
 
-    public function index(?int $limit = null)
+    public function index(int $status = null)
     {
-        $orders = $this->service->list($limit);
+        $userInstanceIds = $this->service->userInstanceIds();
 
-        return view('order.index', compact('orders'));
+        $allOrders = $this->service->getOrders();
+        $orderProcessing = $this->service->getOrders(1);
+        $orderDeclined = $this->service->getOrders(3);
+        $orderCompleted = $this->service->getOrders(4);
+
+        return view('order.index', compact(
+            'allOrders',
+            'orderProcessing',
+            'orderDeclined',
+            'orderCompleted',
+            'userInstanceIds'
+        ));
     }
 
     public function getOne(int $id)
@@ -32,7 +44,7 @@ class OrderController extends Controller
      */
     public function store(OrderStoreRequest $request)
     {
-        return $this->service->create($request->validated());
+        return $this->service->store($request->validated());
     }
 
     /**

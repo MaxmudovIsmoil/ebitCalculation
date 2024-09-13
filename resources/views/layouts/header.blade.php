@@ -11,7 +11,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="nav">
                 <li class="nav-item">
-                    <a class="nav-link fw-semibold" href="https://portal.etc-network.uz">@lang('admin.Portal')</a>
+                    <a class="nav-link fw-semibold" href="https://portal.etc-network.uz">@lang('text.Portal')</a>
                 </li>
 
                 @if (Auth::user()->role == 1)
@@ -45,10 +45,9 @@
                     </li>
                 @endif
                 <li class="nav-item">
-                    <a class="nav-link fw-semibold hover" href="{{ route('order.index') }}">Order</a>
+                    <a class="nav-link fw-semibold hover" href="{{ route('order.index') }}">@lang('text.Orders')</a>
                 </li>
             </ul>
-{{--            {!! \App\Facades\MenuServiceFacade::showMenu() !!}--}}
 
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
@@ -56,32 +55,32 @@
                         {{ auth()->user()->position }} : {{ auth()->user()->name }}
                     </a>
                 </li>
-                <li class="dropdown">
-                    <a class="dropdown-toggle nav-link fw-semibold" href="" role="button" data-bs-toggle="dropdown"
-                       aria-expanded="false">
-                        <i class="fa-solid fa-earth-asia"></i> @lang('admin.Language')
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item fw-semibold @if(App::isLocale('en')) active @endif"
-                               href="{{ route('locale', ['en']) }}">
-                                <i class="flag-icon flag-icon-uz"></i>
-                                <img src="{{ asset('assets/img/usa-flag.png') }}"
-                                     class="lang-flag" alt="usa-flag"/> {{ __("admin.English") }}
-                            </a>
-                        </li>
-                        <li><a class="dropdown-item fw-semibold @if(App::isLocale('ru')) active @endif"
-                               href="{{ route('locale', ['ru']) }}">
-                                <i class="flag-icon flag-icon-ru"></i><img
-                                    src="{{ asset('assets/img/russian-flag.png') }}" class="lang-flag"
-                                    alt="russian-flag"/> {{ __("admin.Russian") }}</a>
-                        </li>
-                    </ul>
-                </li>
+{{--                <li class="dropdown">--}}
+{{--                    <a class="dropdown-toggle nav-link fw-semibold" href="#" role="button" data-bs-toggle="dropdown"--}}
+{{--                       aria-expanded="false">--}}
+{{--                        <i class="fa-solid fa-earth-asia"></i> @lang('text.Language')--}}
+{{--                    </a>--}}
+{{--                    <ul class="dropdown-menu">--}}
+{{--                        <li><a class="dropdown-item fw-semibold @if(App::isLocale('en')) active @endif"--}}
+{{--                               href="{{ route('locale', ['en']) }}">--}}
+{{--                                <i class="flag-icon flag-icon-uz"></i>--}}
+{{--                                <img src="{{ asset('assets/img/usa-flag.png') }}"--}}
+{{--                                     class="lang-flag" alt="usa-flag"/> @lang("text.English")--}}
+{{--                            </a>--}}
+{{--                        </li>--}}
+{{--                        <li><a class="dropdown-item fw-semibold @if(App::isLocale('ru')) active @endif"--}}
+{{--                               href="{{ route('locale', ['ru']) }}">--}}
+{{--                                <i class="flag-icon flag-icon-ru"></i><img--}}
+{{--                                    src="{{ asset('assets/img/russian-flag.png') }}" class="lang-flag"--}}
+{{--                                    alt="russian-flag"/> @lang("text.Russian")</a>--}}
+{{--                        </li>--}}
+{{--                    </ul>--}}
+{{--                </li>--}}
                 <!-- Authentication Links -->
 
                 <a class="nav-link fw-semibold" href="" onclick="event.preventDefault();
                                           document.getElementById('logout-form').submit();">
-                    <i class="fa-solid fa-right-from-bracket"></i> @lang('admin.Sign out')
+                    <i class="fa-solid fa-right-from-bracket"></i> @lang('text.Sign out')
                 </a>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                     @csrf

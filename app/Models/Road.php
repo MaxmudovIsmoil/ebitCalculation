@@ -13,4 +13,5 @@ class Road extends Model
     {
         return $this->hasMany(RoadMap::class, 'roadId');
     }
+
 }

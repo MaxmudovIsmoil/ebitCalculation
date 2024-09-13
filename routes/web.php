@@ -27,24 +27,25 @@ Route::post('login', [AuthController::class, 'login'])->name('login');
 Route::middleware(['auth', 'IsActive'])->group(function () {
 
     // Order
-    Route::resource('order', OrderController::class)->except(['create', 'edit', 'show']);
+    Route::get('order', [OrderController::class, 'index'])->name('order.index');
     Route::get('/order/one/{id}', [OrderController::class, 'getOne'])->name('order.getOne');
-    Route::get('/order/comments/{id}', [OrderController::class, 'getOrderActionComments'])->name('order.getOrderActionComments');
+    Route::post('/order/create', [OrderController::class, 'store'])->name('order.store');
+    Route::put('/order/update/{id}', [OrderController::class, 'update'])->name('order.update');
 
     // order detail
-    Route::get('/order/detail/{orderId}', [OrderDetailController::class, 'getOne'])->name('orderDetail');
-    Route::post('/order-detail/store/', [OrderDetailController::class, 'store'])->name('orderDetail.store');
+    Route::get('/order-detail/{orderId}', [OrderDetailController::class, 'index'])->name('orderDetail');
+    Route::post('/order-detail/create', [OrderDetailController::class, 'store'])->name('orderDetail.store');
     Route::post('/order-detail/update/{id}', [OrderDetailController::class, 'update']);
     Route::delete('/order-detail/delete/{id}', [OrderDetailController::class, 'destroy']);
 
     // order file
     Route::get('/order/get-file/{id}', [OrderFileController::class, 'getFiles'])->name('orderFiles');
-    Route::post('/order-file/store/', [OrderFileController::class, 'store'])->name('orderFile.store');
+    Route::post('/order-file/create', [OrderFileController::class, 'store'])->name('orderFile.store');
     Route::delete('/order-file/delete/{id}', [OrderFileController::class, 'destroy']);
 
     // order action
-    Route::get('/order/get-action/{orderId}', [OrderActionController::class, 'getOrderAction'])->name('order_action');
-    Route::post('/order-action/', [OrderActionController::class, 'action'])->name('order.action');
+//    Route::get('/order/action/{orderId}', [OrderActionController::class, 'getOrderAction'])->name('order_action');
+    Route::put('/order-action/{orderId}', [OrderActionController::class, 'action'])->name('order.action');
 
 
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');

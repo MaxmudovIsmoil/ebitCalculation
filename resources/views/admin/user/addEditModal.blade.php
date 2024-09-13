@@ -11,8 +11,8 @@
                     <div class="row">
 
                         <div class="col-md-6 mb-3">
-                            <label for="road" class="form-label">Department (order-type)<span class="text-danger">*</span></label>
-                            <select name="roadId" class="form-select js_road_id" aria-label="road">
+                            <label for="road" class="form-label">Department (order-type) </label>
+                            <select name="roadId" class="form-select js_roadId" aria-label="road">
                                 <option value="">---</option>
                                 @foreach ($roads as $road)
                                     <option value="{{ $road['id'] }}">{{ $road['name'] }}</option>
@@ -23,7 +23,6 @@
                         <div class="col-md-6 mb-3">
                             <label for="instance" class="form-label">Instance <span class="text-danger">*</span></label>
                             <select name="instanceId" class="form-select js_instanceId" aria-label="instance">
-                                <option value="">---</option>
                                 @foreach ($instances as $instance)
                                     <option value="{{ $instance['id'] }}">{{ $instance['name'] }}</option>
                                 @endforeach

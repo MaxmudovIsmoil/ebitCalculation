@@ -11,6 +11,8 @@
                 <thead>
                     <tr>
                         <th class="text-center">№</th>
+                        <th>Road</th>
+                        <th>Instnace</th>
                         <th>Position</th>
                         <th>Name</th>
                         <th>Email</th>
@@ -58,6 +60,8 @@
             },
             columns: [
                 {data: 'DT_RowIndex'},
+                {data: 'roadName'},
+                {data: 'instanceName'},
                 {data: 'position'},
                 {data: 'name'},
                 {data: 'email'},
@@ -117,7 +121,7 @@
 
                     formFields.forEach(field => form.find(field).val(data[field.slice(4)]));
 
-                    ['instanceId', 'status', 'language', 'canCreateOrder', 'showBuilder'].forEach(prop => {
+                    ['roadId', 'instanceId', 'status', 'language', 'canCreateOrder', 'showBuilder'].forEach(prop => {
                         const options = form.find(`.js_${prop} option`);
                         options.filter(`[value="${data[prop]}"]`).prop('selected', true);
                     });

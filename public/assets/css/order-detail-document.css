@@ -1,0 +1,108 @@
+.header {
+    height:100px;
+    background-color:yellow;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    font-size:1.8em;
+    text-align:center;
+    font-weight:600;
+}
+.table-container {
+    width:100%;
+    border:1px solid black;
+}
+.numbers {
+    width:30px;
+    vertical-align:top;
+    text-align:center;
+    border: 1px solid black;
+    font-weight:600;
+    font-size:large;
+}
+
+.common-border {
+    border: 1px double black;
+    margin-top:2px;
+}
+
+table {
+    border-spacing:1px;
+}
+td {
+    margin:0px;
+    padding:0px;
+}
+.title-container {
+    display:flex;
+    flex-direction: column;
+    width:100%;
+
+}
+.bot-border {
+    border-bottom:1px solid black;
+}
+.centering-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align:center;
+    padding:7px;
+}
+tr {
+    width:100%;
+}
+.value-container {
+    padding:10px;
+}
+
+.paper-container {
+    padding: 50px;
+    border: 3px solid black;
+    width: 1400px;
+}
+
+.title-column {
+    width:420px;
+}
+
+.value-item {
+    display: flex;
+    justify-content: flex-start;
+    padding: 0px;
+    margin: 0xp;
+}
+
+.signature-container {
+    display: flex;
+    align-items: flex-end; /* Aligns the bottom of the line and title */
+    justify-content: flex-start; /* Aligns everything to the left */
+    margin:0px;
+    margin-bottom: 10px;
+}
+
+.signature-line-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 10px; /* Spacing between the line and the title */
+    position: relative;
+}
+
+.signature-line {
+    width: 250px; /* Adjust the width of the line as needed */
+    border-bottom: 1px solid black;
+}
+
+.signature-placeholder {
+    font-size: 10px; /* Adjust the size of the "подпись" text */
+    position: absolute;
+    bottom: -15px; /* Adjust the position of the "подпись" text */
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.signature-title {
+    margin-left: 10px;
+    margin-right:10px;
+}

@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('order_files', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('orderId');
-            $table->unsignedBigInteger('userId');
-            $table->unsignedBigInteger('instanceId');
+            $table->unsignedBigInteger('userId')->nullable();
+            $table->unsignedBigInteger('instanceId')->nullable();
             $table->string('file')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();

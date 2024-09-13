@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('instances', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->string('timeLine')->nullable();
+            $table->string('timeLine')->default(8);
             $table->enum('status', [1, 0])->default(1);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();

@@ -8,7 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class InstanceUser extends Model
 {
     use HasFactory;
-    protected $guarded = ['id'];
+
+     protected $guarded = ['id'];
+//    public $incrementing = false;
+//    protected $primaryKey = null;
 
     public function user()
     {

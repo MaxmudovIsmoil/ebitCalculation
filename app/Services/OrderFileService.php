@@ -49,7 +49,7 @@ class OrderFileService
     public function store(array $data): JsonResponse
     {
         try {
-            $fileName = $this->fileUpload($data['file']);
+            $fileName = $this->uploadFile($data['file']);
             $this->model::create([
                 'orderId' => $data['userId'],
                 'userId' => $data['instanceId'],

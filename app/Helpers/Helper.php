@@ -2,6 +2,9 @@
 namespace App\Helpers;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use App\Models\InstanceUser;
+use App\Models\OrderAction;
 
 class Helper
 {
@@ -30,6 +33,24 @@ class Helper
     }
 
 
+    public static function checkOrderActionComment(array $order): bool
+    {
+        $userId = Auth::id();
+        if($userId == $order['userId']) {
+            return false;
+        }
 
+        $instanceId = InstanceUser::where('userId', $userId)->first()?->instanceId;
+        if(OrderAction::where(['orderId' => $order['id'], 'instanceId' => $instanceId])->latest()->exists()) {
+            return false;
+        }
+        return  true;
+    }
+
+
+    public static function canCreateOrderBtn(): bool
+    {
+        return Auth::user()->roadId && Auth::user()->instanceId && Auth::user()->canCreateOrder;
+    }
 
 }

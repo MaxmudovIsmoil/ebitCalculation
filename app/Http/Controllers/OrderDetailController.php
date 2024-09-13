@@ -14,9 +14,15 @@ class OrderDetailController extends Controller
         protected OrderDetailService $service
     ) {}
 
+
     public function index(int $orderId)
     {
-        return $this->service->list($orderId);
+        $order = $this->service->order($orderId);
+
+        $orderActions = $this->service->orderAction($orderId);
+        $orderRoadMap = $this->service->orderRoadMapRun($orderId);
+
+        return view('order-detail.index', compact('order', 'orderActions', 'orderRoadMap'));
     }
 
 }

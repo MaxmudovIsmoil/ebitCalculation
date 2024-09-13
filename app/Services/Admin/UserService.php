@@ -31,7 +31,11 @@ class UserService
 
     public function getUsers()
     {
-        $users = $this->model->orderBy('id', 'DESC')->get()->toArray();
+        $users = $this->model
+            ->select('users.*', 'instances.name as instanceName', 'roads.name as roadName')
+            ->leftJoin('instances', 'instances.id', '=', 'users.instanceId')
+            ->leftJoin('roads', 'roads.id', '=', 'users.roadId')
+            ->orderBy('id', 'DESC')->get()->toArray();
 
         return DataTables::of($users)
             ->addIndexColumn()
@@ -46,7 +50,6 @@ class UserService
                     ? '<div class="text-center"><i class="fa-solid fa-check text-success"></i></div>'
                     : '<div class="text-center"><i class="fa-solid fa-xmark text-danger"></i></div>';
             })
-
             ->addColumn('action', function ($user) {
                 $deleteBtn = '<a class="js_delete_btn btn btn-outline-danger btn-sm"
                                 data-bs-toggle="modal" data-bs-target="#deleteModal"
@@ -82,6 +85,8 @@ class UserService
     {
         try  {
             $this->model::create([
+                'roadId' => $data['roadId'] ?? null,
+                'instanceId' => $data['instanceId'],
                 'position' => $data['position'],
                 'name' => $data['name'],
                 'email' => $data['email'],
@@ -104,6 +109,8 @@ class UserService
         try  {
             $user = $this->model::findOrfail($id);
             $user->fill([
+                'roadId' => $data['roadId'] ?? null,
+                'instanceId' => $data['instanceId'],
                 'position' => $data['position'],
                 'name' => $data['name'],
                 'email' => $data['email'],

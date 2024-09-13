@@ -1,64 +1,66 @@
-<div class="modal fade" id="addOrderModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="addLabel" aria-hidden="true">
+<div class="modal fade" id="addModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="addLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header pt-2 pb-2">
-                <h5 class="modal-title" id="addLabel"> @lang('addOrder')</h5>
+                <h5 class="modal-title" id="addLabel"> @lang('Add Order')</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('order.store') }}" method="POST" class="js_add_form" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body pt-2 pb-2">
-                    <div class="mb-3">
-                        <label for="customer" class="form-label"> @lang('client')</label>
-                        <input type="text" id="customer" class="form-control" name="customer" />
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="address" class="form-label"> @lang('address')</label>
-                            <input type="text" id="address" class="form-control" name="address" />
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="date" class="form-label"> @lang('Date')</label>
+                            <input type="date" aria-label="date" class="form-control js_date" name="date" />
                         </div>
-                        <div class="col-md-6">
-                            <label for="equipment_cost" class="form-label"> @lang('equipment_and_material_costs')</label>
-                            <input type="text" id="equipment_cost" class="form-control" name="equipment_cost" />
+                        <div class="col-md-4 mb-3">
+                            <label for="client" class="form-label"> @lang('Client')</label>
+                            <input type="text" aria-label="client" class="form-control js_client" name="client" />
                         </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="work_materials" class="form-label"> @lang('labor_and_materials')</label>
-                            <input type="text" id="work_materials" class="form-control" name="work_materials" />
+                        <div class="col-md-4 mb-3">
+                            <label for="address" class="form-label"> @lang('Address')</label>
+                            <input type="text" aria-label="address" class="form-control js_address" name="address" />
                         </div>
-                        <div class="col-md-6">
-                            <label for="lcs" class="form-label"> @lang('lcs')</label>
-                            <input type="text" id="lcs" class="form-control" name="lcs" />
+
+                        <div class="col-md-12 mb-3">
+                            <label for="preliminaryCost" class="col-form-label">@lang('Preliminary cost'):</label>
+                            <textarea class="form-control js_contractPayment" name="preliminaryCost" rows="4" aria-label="preliminaryCost"></textarea>
                         </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="subscription_fee" class="form-label"> @lang('subscriber_line_organization_fee')</label>
-                            <input type="text" id="subscription_fee" class="form-control" name="subscription_fee" />
+
+                        <div class="col-md-12 mb-3">
+                            <label for="contractPayment" class="col-form-label">@lang('№ оf Contract, payment for the organization of the subscriber line,  monthly income for services'):</label>
+                            <textarea class="form-control js_contractPayment" name="contractPayment" rows="4" aria-label="contractPayment"></textarea>
                         </div>
-                        <div class="col-md-6">
-                            <label for="monthly_payment" class="form-label"> @lang('monthly_payment')</label>
-                            <input type="text" id="monthly_payment" class="form-control" name="monthly_payment" />
+
+                        <div class="col-md-4 mb-3">
+                            <label for="subscriptionFee" class="form-label"> @lang('Fee for organizing a subscriber line')</label>
+                            <input type="text" aria-label="subscriptionFee" class="form-control js_subscriptionFee" name="subscriptionFee" />
                         </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="payback_period" class="form-label"> @lang('payback_period')</label>
-                            <input type="text" id="payback_period" class="form-control" name="payback_period" />
+                        <div class="col-md-4 mb-3">
+                            <label for="monthlyPayment" class="form-label"> @lang('Monthly Payment')</label>
+                            <input type="text" aria-label="monthlyPayment" class="form-control js_monthlyPayment" name="monthlyPayment" />
                         </div>
-                        <div class="col-md-6">
-                            <label for="basis" class="form-label"> @lang('basis')</label>
-                            <input type="text" id="basis" class="form-control" name="basis" />
+
+                        <div class="col-md-4 mb-3">
+                            <label for="paybackPeriod" class="form-label"> @lang('Payback period')</label>
+                            <input type="text" aria-label="paybackPeriod" class="form-control js_paybackPeriod" name="paybackPeriod" />
                         </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="file" class="form-label"> @lang('attached_files')</label>
-                        <input type="file" id="file" class="form-control" name="files[]" multiple />
+                        <div class="col-md-4 mb-3">
+                            <label for="constructionWork" class="form-label"> @lang('Construction work')</label>
+                            <input type="text" aria-label="constructionWork" class="form-control js_constructionWork" name="constructionWork" />
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="comment" class="form-label"> @lang('Comment')</label>
+                            <input type="text" aria-label="comment" class="form-control js_comment" name="comment" />
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="file" class="form-label"> @lang('Attached files')</label>
+                            <input type="file" aria-label="file" class="form-control js_files" name="files[]" multiple/>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer pt-2 pb-2">
-                    <input type="submit" class="btn btn-primary" :value="$t('apply')">
+                    <input type="submit" class="btn btn-primary" value="@lang('Save')"/>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"> @lang('close')</button>
                 </div>
             </form>

@@ -39,6 +39,8 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'roadId',
+        'instanceId',
         'position',
         'name',
         'email',

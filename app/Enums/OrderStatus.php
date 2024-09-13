@@ -6,18 +6,17 @@ enum OrderStatus: int
 {
     case PROCESSING = 1;
     case ACCEPTED = 2;
-    case GO_BACK = 3;
-    case DECLINED = 4;
-    case COMPLETED = 5;
+    case DECLINED = 3;
+    case COMPLETED = 4;
+
+    public function isProcessing(): bool
+    {
+        return  $this === self::PROCESSING;
+    }
 
     public function isAccepted(): bool
     {
         return  $this === self::ACCEPTED;
-    }
-
-    public function isGoBack(): bool
-    {
-        return  $this === self::GO_BACK;
     }
 
     public function isDeclined(): bool
@@ -35,7 +34,6 @@ enum OrderStatus: int
         return [
             self::PROCESSING->value,
             self::ACCEPTED->value,
-            self::GO_BACK->value,
             self::DECLINED->value,
             self::COMPLETED->value,
         ];
@@ -44,11 +42,10 @@ enum OrderStatus: int
     public function getLabelText(): string
     {
         return match ($this) {
-            self::PROCESSING => trans('admin.In Processing'),
-            self::ACCEPTED => trans('admin.Accepted'),
-            self::GO_BACK => trans('admin.Go back'),
-            self::DECLINED => trans('admin.Declined'),
-            self::COMPLETED => trans('admin.Completed'),
+            self::PROCESSING => trans('text.In Processing'),
+            self::ACCEPTED => trans('text.Accepted'),
+            self::DECLINED => trans('text.Declined'),
+            self::COMPLETED => trans('text.Completed'),
         };
     }
 }
